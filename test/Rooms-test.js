@@ -61,4 +61,10 @@ describe('Rooms Class', () => {
     expect(testRooms.filterByRoomType('single room')).to.deep.equal([room3, room4])
     expect(testRooms.filterByRoomType('junior suite')).to.deep.equal([room2])
   })
+
+  it('can accurately calculate total amount spent on all bookings listed as an array of room numbers', () => {
+    expect(testRooms.calcHistoricalSpending([31, 34])).to.deep.equal(711.25)
+    expect(testRooms.calcHistoricalSpending([32, 33])).to.deep.equal(655.5)
+    expect(testRooms.calcHistoricalSpending([32, 32])).to.deep.equal(691)
+  })
 })
