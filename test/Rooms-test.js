@@ -70,5 +70,8 @@ describe('Rooms Class', () => {
 
   it('can accurately calculate the percent capacity given the rooms filled', () => {
     expect(testRooms.calcCapacity([31])).to.deep.equal(25)
+    expect(testRooms.calcCapacity([31, 32, 33])).to.deep.equal(75)
+    testRooms.rooms = [31, 32, 33]
+    expect(testRooms.calcCapacity([31])).to.deep.equal(33)
   })
 })
