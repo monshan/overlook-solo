@@ -53,6 +53,10 @@ describe('Rooms Class', () => {
     expect(testRooms).to.be.an.instanceOf(Rooms)
   })
 
+  it('should store a collection of all rooms as an array', () => {
+    expect(testRooms.rooms).to.be.an('array')
+  })
+
   it('should be able to accurately filter rooms by their roomType property', () => {
     expect(testRooms.filterByRoomType('single room')).to.deep.equal([room3, room4])
     expect(testRooms.filterByRoomType('junior suite')).to.deep.equal([room2])
