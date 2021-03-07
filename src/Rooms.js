@@ -13,4 +13,8 @@ export default class Rooms {
       return total;
     }, 0)
   }
+
+  calcCapacity (roomsFilled) {
+    return parseInt(roomsFilled.length / this.rooms.length)
+  }
 }

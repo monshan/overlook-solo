@@ -5,5 +5,7 @@ export default class User {
     this.bookingsRecord = []
   }
 
-  
+  billingRoomNumbers () {
+    
+  }
 }
