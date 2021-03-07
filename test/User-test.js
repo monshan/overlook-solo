@@ -90,5 +90,9 @@ describe('User Class', () => {
     user1.addToBookingsRecord(booking1);
     user1.addToBookingsRecord(booking2);
     expect(user1.billingRoomNumbers()).to.deep.equal([33, 34])
+
+    user2.addToBookingsRecord(booking1);
+    user2.addToBookingsRecord(booking3);
+    expect(user2.billingRoomNumbers()).to.deep.equal([31])
   })
 })
