@@ -1,0 +1,37 @@
+* {
+  font-family: $primary-font;
+}
+
+body {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 150px 750px 50px;
+}
+
+header {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main {
+  grid-column: 1 / 4;
+  grid-row: 2 / 3;
+  border: 2px solid $primary-color;
+}
+
+aside {
+  grid-column: 4 / 5;
+  grid-row: 2 / 3;
+  border: 2px solid $secondary-color;
+}
+
+footer {
+  grid-column: 1 / -1;
+  grid-row: 3 / 4;
+}
+
+.dotted {
+  font-family: $accent-font;
+}
