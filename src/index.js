@@ -54,6 +54,7 @@ const populateBookings = (desiredBookings) => {
     userBookings.innerHTML += `<section class="booking-card">
     <h3>${book.date}</h3>
     <p>Room Number: <span class="italics">${book.roomNumber}</span></p>
+    <button>&#x02295</button>
   </section>`
   });
 }
@@ -61,13 +62,13 @@ const populateBookings = (desiredBookings) => {
 const populateRooms = (availableRooms) => {
   activeArea.innerHTML = '';
   availableRooms.forEach(room => {
-    activeArea.innerHTML += `<section class="room-card" id="room${room.number}">
+    activeArea.innerHTML += `<section class="room-card" id="${room.number}">
     <h3>${room.roomType} ${room.number}</h3>
     <p>Bed Size: <span class="italics">${room.bedSize}</span></p>
     <p>Has Bidet: <span class="italics">${room.bidet}<span></p>
     <p>Number of Beds: <span class="italics"></span>${room.numBeds}</p>
-    <p>Rate per Night: <span class="italics"></span>$${room.costPerNight}</p>
-    <button class="book-this-room">book</button>
+    <p>Rate per Night: <span class="italics"></span>$${room.costPerNight.toFixed(2)}</p>
+    <button class="book-this-room">&#x02295 book</button>
   </section>`
   })
 }
@@ -105,6 +106,38 @@ const filterByRoomType = (set, desiredType) => {
   return set.filter(room => room.roomType === desiredType)
 }
 
+const postNewBooking = (newBooking) => {
+  fetch("http://localhost:3001/api/v1/bookings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newBooking)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.json()
+    })
+    .catch(error => console.log(error))
+}
+
+const popModal = () => {
+  let domID = event.target.closest('button').parentNode.id;
+  let selectedDate = selectDate.value.replaceAll('-', '/');
+  Swal.fire({
+    title: 'Please confirm your booking information',
+    text: `Date: ${selectedDate} Room Number: ${domID}`,
+    icon: 'info',
+    showCancelButton: true,
+    footer: 'Overlook Hotel Bookings'
+  })
+    .then(result => {
+    if (result.isConfirmed) {
+      console.log(result)
+    }
+    })
+  }
+
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
@@ -116,3 +149,4 @@ const roomTypeSelector = document.getElementById('roomTypeSelector')
 onLoad();
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
+activeArea.addEventListener('click', () => popModal())
