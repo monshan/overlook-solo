@@ -62,13 +62,18 @@ describe('Rooms Class', () => {
     expect(testRooms.filterByRoomType('junior suite')).to.deep.equal([room2])
   })
 
+  it('can accurately filter available rooms given the room numbers filled', () => {
+    expect(testRooms.filterByAva([31])).to.deep.equal([room2, room3, room4])
+    expect(testRooms.filterByAva([room2.number, room3.number])).to.deep.equal([room1, room4])
+  })
+
   it('can accurately calculate total amount spent on all bookings listed as an array of room numbers', () => {
     expect(testRooms.calcHistoricalSpending([31, 34])).to.deep.equal(711.25)
     expect(testRooms.calcHistoricalSpending([32, 33])).to.deep.equal(655.5)
     expect(testRooms.calcHistoricalSpending([32, 32])).to.deep.equal(691)
   })
 
-  it('can accurately calculate the percent capacity given the rooms filled', () => {
+  it('can accurately calculate the percent capacity given the room numbers filled', () => {
     expect(testRooms.calcCapacity([31])).to.deep.equal(25)
     expect(testRooms.calcCapacity([31, 32, 33])).to.deep.equal(75)
     testRooms.rooms = [31, 32, 33]

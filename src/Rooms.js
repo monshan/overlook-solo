@@ -7,6 +7,10 @@ export default class Rooms {
     return this.rooms.filter(room => room.roomType === desiredType)
   }
 
+  filterByAva (roomsFilled) {
+    return this.rooms.filter(room => !roomsFilled.includes(room.number))
+  }
+
   calcHistoricalSpending (listOfRoomNumbers) {
     return listOfRoomNumbers.reduce((total, roomNum) => {
       total += parseFloat(this.rooms.find(room => room.number === roomNum).costPerNight);
