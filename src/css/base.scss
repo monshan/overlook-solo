@@ -1,5 +1,6 @@
-@import 'reset', 'variables';
+@import url('https://fonts.googleapis.com/css2?family=Raleway+Dots&family=Raleway:ital,wght@0,300;0,400;1,200&display=swap');
+@import 'reset', 'variables', 'mixins';
 
 body {
-  background: $primary-background;
+  font-family: $primary-font;
 }
