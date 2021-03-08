@@ -7,9 +7,6 @@ import Bookings from './Bookings'
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 // import './images/turing-logo.png'
-// let currentUser = null;
-// let globalRooms = null;
-// let globalBookings = null;
 
 const getRooms = () => {
   return fetch('http://localhost:3001/api/v1/rooms')
@@ -30,7 +27,7 @@ const randomUser = () => {
   return Math.floor(Math.random() * 50)
 }
 
-const loadGlobals = () => {
+const onLoad = () => {
   Promise.all([getRooms(), getBookings(), getSingleUser(randomUser())])
     .then(([loadedRooms, loadedBookings, loadedUser]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
@@ -41,20 +38,11 @@ const loadGlobals = () => {
       })
       activeUser.sortBookings();
       const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
-      console.log(activeUser.bookingsRecord)
       populateBookings(activeUser.bookingsRecord)
       setSpendingMessage(billing)
-
-      // assignGlobals(roomsOnly, loadedBookings, loadedUser)
     })
-    .catch()
+    .catch(err => console.log(err))
 }
-
-// const assignGlobals = (gotRooms, gotBookings, currUser) => {
-//   globalRooms = new Rooms (gotRooms);
-//   globalBookings = new Bookings (gotBookings);
-//   currentUser = new User (currUser);
-// }
 
 const setSpendingMessage = (amt) => {
   spendingMess.innerText = `You've spent $${amt.toFixed(2)} on all bookings with Overlook, thank you for choosing us!`
@@ -70,12 +58,41 @@ const populateBookings = (desiredBookings) => {
   });
 }
 
-// Fire on load & Event Listeners
+const populateRooms = (availableRooms) => {
+  activeArea.innerHTML = '';
+  availableRooms.forEach(room => {
+    activeArea.innerHTML += `<section class="room-card" id="room${room.number}">
+    <h3>${room.roomType} ${room.number}</h3>
+    <p>Bed Size: <span class="italics">${room.bedSize}</span></p>
+    <p>Has Bidet: <span class="italics">${room.bidet}<span></p>
+    <p>Number of Beds: <span class="italics"></span>${room.numBeds}</p>
+    <p>Rate per Night: <span class="italics"></span>$${room.costPerNight}</p>
+    <button class="book-this-room">book</button>
+  </section>`
+  })
+}
 
-loadGlobals();
+const showAvailableRooms = () => {
+  Promise.all([getRooms(), getBookings(), getSingleUser(randomUser())])
+    .then(([loadedRooms, loadedBookings]) => {
+      const roomsRepo = new Rooms (loadedRooms.rooms);
+      const bookingsRepo = new Bookings (loadedBookings.bookings);
+      console.log(selectDate.value.replaceAll('-', '/'))
+      const filled = bookingsRepo.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+      console.log(filled)
+      const openRooms = roomsRepo.filterByAva(filled);
+      console.log(openRooms)
+      populateRooms(openRooms);
+    })
+    .catch(err => console.log(err))
+}
 
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
 const selectDate = document.getElementById('selectDate')
+const activeArea = document.getElementById('activeArea')
 
+// Fire on load & Event Listeners
+onLoad();
+selectDate.addEventListener('change', () => showAvailableRooms())

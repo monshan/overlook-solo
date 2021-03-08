@@ -4,7 +4,12 @@ export default class Bookings {
   }
 
   bookingsByDate (desiredDate) {
-    return this.bookings.filter(booking => booking.date === desiredDate)
+    return this.bookings.reduce((roomNums, booking) => {
+      if (booking.date === desiredDate) {
+        roomNums.push(booking.roomNumber);
+      }
+      return roomNums;
+    }, []);
   }
 
   bookingsByUser (desiredUserID) {
