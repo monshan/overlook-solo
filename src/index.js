@@ -1,11 +1,15 @@
-// An example of how you tell webpack to use a CSS (SCSS) file
+// Imports
 import Swal from 'sweetalert2'
 import './css/base.scss';
+import User from './User'
 import Rooms from './Rooms'
 import Bookings from './Bookings'
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 // import './images/turing-logo.png'
+// let currentUser = null;
+// let globalRooms = null;
+// let globalBookings = null;
 
 const getRooms = () => {
   return fetch('http://localhost:3001/api/v1/rooms')
@@ -17,12 +21,45 @@ const getBookings = () => {
     .then(response => response.json())
 }
 
-const loadGlobals = () => {
-  Promise.all([getRooms(), getBookings()])
-    .then(([loadedRooms, loadedBookings]) => {
-      globalRooms = new Rooms (loadedRooms)
-      globalBookings = new Bookings (loadedBookings)
-    })
+const getSingleUser = (loginID) => {
+  return fetch('http://localhost:3001/api/v1/customers/' + loginID)
+    .then(response => response.json())
 }
 
+const randomUser = () => {
+  return Math.floor(Math.random() * 50)
+}
+
+const loadGlobals = () => {
+  Promise.all([getRooms(), getBookings(), getSingleUser(randomUser())])
+    .then(([loadedRooms, loadedBookings, loadedUser]) => {
+      const roomsRepo = new Rooms (loadedRooms.rooms);
+      const bookingsRepo = new Bookings (loadedBookings.bookings);
+      const activeUser = new User (loadedUser);
+      bookingsRepo.bookingsByUser(activeUser.id).forEach(entry => {
+        return activeUser.addToBookingsRecord(entry);
+      })
+      const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
+      setSpendingMessage(billing)
+      // assignGlobals(roomsOnly, loadedBookings, loadedUser)
+    })
+    .catch()
+}
+
+// const assignGlobals = (gotRooms, gotBookings, currUser) => {
+//   globalRooms = new Rooms (gotRooms);
+//   globalBookings = new Bookings (gotBookings);
+//   currentUser = new User (currUser);
+// }
+
+const setSpendingMessage = (amt) => {
+  spendingMess.innerText = `You've spent $${amt.toString()} on all bookings with Overlook, thank you for choosing us!`
+}
+
+// Fire on load & Event Listeners
+
 loadGlobals();
+
+// Query Selectors
+const spendingMess = document.getElementById('spendingMess');
+
