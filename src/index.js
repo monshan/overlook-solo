@@ -73,18 +73,36 @@ const populateRooms = (availableRooms) => {
 }
 
 const showAvailableRooms = () => {
-  Promise.all([getRooms(), getBookings(), getSingleUser(randomUser())])
+  Promise.all([getRooms(), getBookings()])
     .then(([loadedRooms, loadedBookings]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
       const bookingsRepo = new Bookings (loadedBookings.bookings);
-      console.log(selectDate.value.replaceAll('-', '/'))
       const filled = bookingsRepo.bookingsByDate(selectDate.value.replaceAll('-', '/'));
-      console.log(filled)
       const openRooms = roomsRepo.filterByAva(filled);
-      console.log(openRooms)
       populateRooms(openRooms);
     })
     .catch(err => console.log(err))
+}
+
+const advancedFilterRooms = () => {
+  Promise.all([getRooms(), getBookings()])
+    .then(([loadedRooms, loadedBookings]) => {
+      const roomsRepo = new Rooms (loadedRooms.rooms);
+      const bookingsRepo = new Bookings (loadedBookings.bookings);
+      const filled = bookingsRepo.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+      const openRooms = roomsRepo.filterByAva(filled);
+      if (roomTypeSelector.value) {
+        const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
+        populateRooms(advancedRooms);
+      } else {
+        populateRooms(openRooms);
+      }
+    })
+    .catch(err => console.log(err))
+}
+
+const filterByRoomType = (set, desiredType) => {
+  return set.filter(room => room.roomType === desiredType)
 }
 
 // Query Selectors
@@ -92,7 +110,9 @@ const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
 const selectDate = document.getElementById('selectDate')
 const activeArea = document.getElementById('activeArea')
+const roomTypeSelector = document.getElementById('roomTypeSelector')
 
 // Fire on load & Event Listeners
 onLoad();
 selectDate.addEventListener('change', () => showAvailableRooms())
+roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
