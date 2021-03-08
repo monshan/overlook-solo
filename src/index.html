@@ -16,8 +16,12 @@
     <main>
       <h2>Rooms Available</h2>
       <section class="active-area">
-        <section class="room-card">
-          <h3>residential suite 1</h3>
+        <section class="room-card" id=${}>
+          <h3>${} ${}</h3>
+          <p>Bed Size: <span class="italics">${}</span></p>
+          <p>Has Bidet: <span class="italics">${}<span></p>
+          <p>Number of Beds: <span class="italics"></span>${}</p>
+          <p>Rate per Night: <span class="italics"></span><${}/p>
           <button class="book-this-room">book</button>
         </section>
       </section>
@@ -25,7 +29,8 @@
     <aside>
       <h2>All your bookings</h2>
       <p id="spendingMess"></p>
-      <section id="userBookings"></section>
+      <section id="userBookings">
+      </section>
     </aside>
     <footer>
       <ul>

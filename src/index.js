@@ -40,7 +40,10 @@ const loadGlobals = () => {
         return activeUser.addToBookingsRecord(entry);
       })
       const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
+      console.log(activeUser.bookingsRecord)
+      populateBookings(activeUser.bookingsRecord)
       setSpendingMessage(billing)
+
       // assignGlobals(roomsOnly, loadedBookings, loadedUser)
     })
     .catch()
@@ -53,7 +56,17 @@ const loadGlobals = () => {
 // }
 
 const setSpendingMessage = (amt) => {
-  spendingMess.innerText = `You've spent $${amt.toString()} on all bookings with Overlook, thank you for choosing us!`
+  spendingMess.innerText = `You've spent $${amt.toFixed(2)} on all bookings with Overlook, thank you for choosing us!`
+}
+
+const populateBookings = (desiredBookings) => {
+  userBookings.innerHTML = '';
+  desiredBookings.forEach(book => {
+    userBookings.innerHTML += `<section class="booking-card">
+    <h3>${book.date}</h3>
+    <p>Room Number: <span class="italics">${book.roomNumber}</span></p>
+  </section>`
+  });
 }
 
 // Fire on load & Event Listeners
@@ -62,4 +75,5 @@ loadGlobals();
 
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
+const userBookings = document.getElementById('userBookings')
 
