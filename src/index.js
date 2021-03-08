@@ -39,6 +39,7 @@ const loadGlobals = () => {
       bookingsRepo.bookingsByUser(activeUser.id).forEach(entry => {
         return activeUser.addToBookingsRecord(entry);
       })
+      activeUser.sortBookings();
       const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
       console.log(activeUser.bookingsRecord)
       populateBookings(activeUser.bookingsRecord)
@@ -76,4 +77,5 @@ loadGlobals();
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
+const selectDate = document.getElementById('selectDate')
 
