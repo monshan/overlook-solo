@@ -10,20 +10,28 @@
   <body>
     <header>
       <h1>Welcome to <span class="dotted">Overlook</span></h1>
-      <input type="date">
-      <button id="testBtn">Testing Sweet Alert</button>
+      <input type="date" id="selectDate">
+      <details>
+        <summary>Advanced Search</summary>
+        <select name="roomTypes" id="roomTypeSelector">
+          <option value="">Room Type</option>
+          <option value="single room">Single Room</option>
+          <option value="suite">Suite</option>
+          <option value="junior suite">Junior Suite</option>
+          <option value="residential suite">Residential Suite</option>
+        </select>
+      </details>
     </header>
     <main>
       <h2>Rooms Available</h2>
-      <section class="active-area">
-        <section class="room-card">
-          <h3>residential suite 1</h3>
-          <button class="book-this-room">book</button>
-        </section>
+      <section class="active-area" id="activeArea">
       </section>
     </main>
     <aside>
       <h2>All your bookings</h2>
+      <p id="spendingMess"></p>
+      <section id="userBookings">
+      </section>
     </aside>
     <footer>
       <ul>

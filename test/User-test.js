@@ -95,4 +95,12 @@ describe('User Class', () => {
     user2.addToBookingsRecord(booking3);
     expect(user2.billingRoomNumbers()).to.deep.equal([31])
   })
+
+  it('can accurately sort bookings by date from most to least recent', () => {
+    user2.addToBookingsRecord(booking4);
+    user2.addToBookingsRecord(booking3);
+    expect(user2.bookingsRecord).to.deep.equal([booking4, booking3])
+    user2.sortBookings()
+    expect(user2.bookingsRecord).to.deep.equal([booking3, booking4])
+  })
 })

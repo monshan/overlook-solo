@@ -53,9 +53,9 @@ describe('Bookings Class', () => {
     expect(testBookings.bookings).to.be.an('array')
   })
 
-  it('can accurately determine the rooms booked for a single date', () => {
-    expect(testBookings.bookingsByDate('2020/02/18')).to.deep.equal([booking1, booking3])
-    expect(testBookings.bookingsByDate('2020/02/17')).to.deep.equal([booking2, booking4])
+  it('can accurately determine the room numbers booked for a single date', () => {
+    expect(testBookings.bookingsByDate('2020/02/18')).to.deep.equal([33, 31])
+    expect(testBookings.bookingsByDate('2020/02/17')).to.deep.equal([34, 32])
   })
 
   it('can accurately determine the bookings of a specific user', () => {
