@@ -1,7 +1,2 @@
-/* This is an example of using Sass, otherwise plain CSS works too*/
-$primary-background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-;
-
-body {
-  background: $primary-background;
-}
+@import url('https://fonts.googleapis.com/css2?family=Raleway+Dots&family=Raleway:ital,wght@0,300;0,400;1,200&display=swap');
+@import 'reset', 'variables', 'mixins', 'working', 'active-area', 'room-card';

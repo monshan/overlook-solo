@@ -1,13 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <title>Webpack Starter Kit</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hotel booking web application">
+    <meta name="author" content="Marika Shanahan">
+    <title>Overlook Solo</title>
   </head>
   <body>
-    <h1>Webpack Starter Kit</h1>
-
-    <img src="./images/turing-logo.png" alt="turing logo" height="100px" width="100px">
-
+    <header>
+      <h1>Welcome to <span class="dotted">Overlook</span></h1>
+      <input type="date">
+      <button id="testBtn">Testing Sweet Alert</button>
+    </header>
+    <main>
+      <h2>Rooms Available</h2>
+      <section class="active-area">
+        <section class="room-card">
+          <h3>residential suite 1</h3>
+          <button class="book-this-room">book</button>
+        </section>
+      </section>
+    </main>
+    <aside>
+      <h2>All your bookings</h2>
+    </aside>
+    <footer>
+      <ul>
+        <li>Contact</li>
+      </ul>
+    </footer>
     <!-- Do not include the index.js or main.bundle.js file here - it is done automatically by the webpack server -->
   </body>
 </html>
