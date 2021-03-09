@@ -5,7 +5,6 @@
   position: relative;
   height: 175px;
   width: 1fr;
-  padding-left: 25px;
   @include cubicShadow($primary-color);
 
   button {

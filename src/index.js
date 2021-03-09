@@ -9,6 +9,7 @@ import Bookings from './Bookings'
 // import './images/turing-logo.png'
 let globalRooms = null;
 let globalBookings = null;
+let globalUsers = null;
 let currentUser = null;
 
 
@@ -95,12 +96,10 @@ const grabDate = () => {
   return selectDate.value.replaceAll('-', '/');
 }
 
-const determineReport = () => {
-  const filled = globalBookings.bookingsByDate(grabDate());
-  const openRooms = globalRooms.filterByAva(filled);
+const determineReport = (filled, open) => {
   const rev = globalRooms.calcHistoricalSpending(filled);
   const occ = globalRooms.calcCapacity(filled);
-  populateReport(openRooms.length, occ, rev);
+  populateReport(open.length, occ, rev);
 }
 
 const populateReport = (count, occ, rev) => {
@@ -117,7 +116,7 @@ const showAvailableRooms = () => {
   } else {
     fireApology();
   }
-  determineReport();
+  determineReport(filled, openRooms);
 }
 
 const advancedFilterRooms = () => {
@@ -137,7 +136,7 @@ const advancedFilterRooms = () => {
       fireApology();
     }
   }
-  determineReport();
+  determineReport(filled, openRooms);
 }
 
 const fireApology = () => {
@@ -224,6 +223,10 @@ const popModal = () => {
     })
 }
 
+const populateUsers = () => {
+  
+}
+
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
@@ -236,7 +239,8 @@ const username = document.getElementById('username')
 const password = document.getElementById('password')
 const reportCount = document.getElementById('reportCount');
 const reportRevenue = document.getElementById('reportRevenue');
-const reportOcc = document.getElementById('reportOcc')
+const reportOcc = document.getElementById('reportOcc');
+const searchUser = document.getElementById('searchUser');
 
 // Fire on load & Event Listeners
 onLoad(5);

@@ -1,7 +1,7 @@
 .dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 175px auto;
+  grid-template-rows: 250px auto;
 }
 
 aside {
@@ -17,4 +17,9 @@ aside {
 footer {
   grid-column: 1 / -1;
   grid-row: 3 / 4;
+}
+
+.main__section__manager {
+  margin: 20px;
+  @include cubicShadow(black);
 }
