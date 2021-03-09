@@ -2,7 +2,7 @@
   font-family: $primary-font;
 }
 
-body {
+.dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 150px auto;
@@ -35,4 +35,13 @@ footer {
 
 .dotted {
   font-family: $accent-font;
+}
+
+.aside__p__span {
+  font-style: italic;
+  font-weight: bolder;
+}
+
+.italics {
+  font-style: italic;
 }

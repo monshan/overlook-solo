@@ -60,7 +60,7 @@ const updateUserBookings = () => {
 }
 
 const setSpendingMessage = (amt) => {
-  spendingMess.innerText = `You've spent $${amt.toFixed(2)} on all bookings with Overlook, thank you for choosing us!`
+  spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
 }
 
 const populateBookings = (desiredBookings) => {
@@ -69,7 +69,6 @@ const populateBookings = (desiredBookings) => {
     userBookings.innerHTML += `<section class="booking-card">
     <h3>${book.date}</h3>
     <p>Room Number: <span class="italics">${book.roomNumber}</span></p>
-    <button>&#x02295</button>
   </section>`
   });
 }
