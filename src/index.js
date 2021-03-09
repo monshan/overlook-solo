@@ -129,6 +129,7 @@ const popModal = () => {
   let selectedRoom = globalRooms.rooms.find(room => room.number === parseInt(domID));
   let selectedDate = selectDate.value.replaceAll('-', '/');
   const newBooking = {
+    "id": "5fwrgu4i7k55hl600",
     "userID": currentUser.id,
     "date": selectedDate,
     "roomNumber": selectedRoom.number
@@ -142,11 +143,17 @@ const popModal = () => {
   })
     .then(result => {
     if (result.isConfirmed) {
-      currentUser.bookingsRecord.unshift(postNewBooking(newBooking));
-      setSpendingMessage()
+      const confirmBooking = postNewBooking(newBooking)
+      currentUser.bookingsRecord.unshift(confirmBooking);
+      Swal.fire({
+        title: 'See you then!',
+        icon: 'success',
+        text: `Your booking on ${selectedDate} is confirmed, if you would like to make chages or cancel your booking please access your 'My bookings' section`,
+        footer: 'Overlook Hotel Bookings'
+      })
     }
     })
-  }
+}
 
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
