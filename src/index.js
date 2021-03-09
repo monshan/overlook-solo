@@ -7,6 +7,10 @@ import Bookings from './Bookings'
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 // import './images/turing-logo.png'
+let globalRooms = null;
+let globalBookings = null;
+let currentUser = null;
+
 
 const getRooms = () => {
   return fetch('http://localhost:3001/api/v1/rooms')
@@ -28,7 +32,7 @@ const randomUser = () => {
 }
 
 const onLoad = () => {
-  Promise.all([getRooms(), getBookings(), getSingleUser(randomUser())])
+  Promise.all([getRooms(), getBookings(), getSingleUser(5)])
     .then(([loadedRooms, loadedBookings, loadedUser]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
       const bookingsRepo = new Bookings (loadedBookings.bookings);
@@ -37,11 +41,18 @@ const onLoad = () => {
         return activeUser.addToBookingsRecord(entry);
       })
       activeUser.sortBookings();
+      assignGlobals(roomsRepo, bookingsRepo, activeUser);
       const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
       populateBookings(activeUser.bookingsRecord)
       setSpendingMessage(billing)
     })
     .catch(err => console.log(err))
+}
+
+const assignGlobals = (rooms, bookings, user) => {
+  globalRooms = rooms;
+  globalBookings = bookings;
+  currentUser = user;
 }
 
 const setSpendingMessage = (amt) => {
@@ -74,32 +85,20 @@ const populateRooms = (availableRooms) => {
 }
 
 const showAvailableRooms = () => {
-  Promise.all([getRooms(), getBookings()])
-    .then(([loadedRooms, loadedBookings]) => {
-      const roomsRepo = new Rooms (loadedRooms.rooms);
-      const bookingsRepo = new Bookings (loadedBookings.bookings);
-      const filled = bookingsRepo.bookingsByDate(selectDate.value.replaceAll('-', '/'));
-      const openRooms = roomsRepo.filterByAva(filled);
-      populateRooms(openRooms);
-    })
-    .catch(err => console.log(err))
+  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const openRooms = globalRooms.filterByAva(filled);
+  populateRooms(openRooms);
 }
 
 const advancedFilterRooms = () => {
-  Promise.all([getRooms(), getBookings()])
-    .then(([loadedRooms, loadedBookings]) => {
-      const roomsRepo = new Rooms (loadedRooms.rooms);
-      const bookingsRepo = new Bookings (loadedBookings.bookings);
-      const filled = bookingsRepo.bookingsByDate(selectDate.value.replaceAll('-', '/'));
-      const openRooms = roomsRepo.filterByAva(filled);
-      if (roomTypeSelector.value) {
-        const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
-        populateRooms(advancedRooms);
-      } else {
-        populateRooms(openRooms);
-      }
-    })
-    .catch(err => console.log(err))
+  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const openRooms = globalRooms.filterByAva(filled);
+  if (roomTypeSelector.value) {
+    const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
+    populateRooms(advancedRooms);
+  } else {
+    populateRooms(openRooms);
+  }
 }
 
 const filterByRoomType = (set, desiredType) => {
@@ -107,7 +106,7 @@ const filterByRoomType = (set, desiredType) => {
 }
 
 const postNewBooking = (newBooking) => {
-  fetch("http://localhost:3001/api/v1/bookings", {
+  return fetch("http://localhost:3001/api/v1/bookings", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newBooking)
@@ -123,17 +122,23 @@ const postNewBooking = (newBooking) => {
 
 const popModal = () => {
   let domID = event.target.closest('button').parentNode.id;
+  let selectedRoom = globalRooms.rooms.find(room => room.number === parseInt(domID));
   let selectedDate = selectDate.value.replaceAll('-', '/');
+  const newBooking = {
+    "userID": currentUser.id,
+    "date": selectedDate,
+    "roomNumber": selectedRoom.number
+  };
   Swal.fire({
     title: 'Please confirm your booking information',
-    text: `Date: ${selectedDate} Room Number: ${domID}`,
+    text: `Date: ${selectedDate} Room Number: ${selectedRoom.number} User: ${currentUser.name}`,
     icon: 'info',
     showCancelButton: true,
     footer: 'Overlook Hotel Bookings'
   })
     .then(result => {
     if (result.isConfirmed) {
-      console.log(result)
+      postNewBooking(newBooking);
     }
     })
   }
