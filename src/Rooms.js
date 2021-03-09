@@ -11,6 +11,10 @@ export default class Rooms {
     return this.rooms.filter(room => !roomsFilled.includes(room.number))
   }
 
+  findRoom (roomNumber) {
+    return this.rooms.find(room => room.number === roomNumber)
+  }
+
   calcHistoricalSpending (listOfRoomNumbers) {
     return listOfRoomNumbers.reduce((total, roomNum) => {
       total += parseFloat(this.rooms.find(room => room.number === roomNum).costPerNight);
