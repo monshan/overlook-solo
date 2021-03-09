@@ -8,7 +8,7 @@
     <title>Overlook Solo</title>
   </head>
   <body>
-    <section class="login-page hidden" id="loginPage">
+    <section class="login-page" id="loginPage">
       <h1>Hello <span class="dotted">Friend</span>,</h1>
       <h2 class="italics">have we met before?</h2>
       <input type="text" placeholder="username" role="tab" id="username">
@@ -33,15 +33,25 @@
         </details>
       </header>
       <main>
-        <section class="main__section__manager">
+        <section class="main__section__report hidden" id="dateReport">
           <h2>Date Report</h2>
           <hr>
           <h3>Total Rooms Available: <span class="italics" id="reportCount"></span></h3>
           <h3>Revenue for selected date: <span class="italics" id="reportRevenue"></span></h3>
           <h3>Percentage Occupancy: <span class="italics" id="reportOcc"></span></h3>
         </section>
-        <h2>Rooms Available</h2>
-        <section class="active-area" id="activeArea">
+        <section class="main__section__user-search hidden" id="userSearch">
+          <h2>Users</h2>
+          <hr>
+          <section id="searchUserResults">
+            <h3></h3>
+            <button>See details</button>
+          </section>
+        </section>
+        <section class="main__section__room-search" id="roomSearch">
+          <h2>Rooms Available</h2>
+          <section class="active-area" id="activeArea">
+          </section>
         </section>
       </main>
       <aside>
@@ -51,12 +61,14 @@
         <section id="userBookings">
         </section>
       </aside>
+      <aside class="hidden">
+        <h2 id="managerViewName"></h2>
+        <h2>Total Spent: <span class="italics" id="managerViewSpending"></span></h2>
+        <hr>
+        <h2>Bookings</h2>
+        <section id="managerViewBookings">
+        </section>
+      </aside>
     </section>
-    <!-- <footer>
-      <ul>
-        <li>Contact</li>
-      </ul>
-    </footer> -->
-    <!-- Do not include the index.js or main.bundle.js file here - it is done automatically by the webpack server -->
   </body>
 </html>
