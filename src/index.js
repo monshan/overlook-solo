@@ -31,8 +31,12 @@ const randomUser = () => {
   return Math.floor(Math.random() * 50)
 }
 
-const onLoad = () => {
-  Promise.all([getRooms(), getBookings(), getSingleUser(5)])
+const hide = (desiredElement) => {
+  desiredElement.classList.add('hidden')
+}
+
+const onLoad = (userID) => {
+  Promise.all([getRooms(), getBookings(), getSingleUser(userID)])
     .then(([loadedRooms, loadedBookings, loadedUser]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
       const bookingsRepo = new Bookings (loadedBookings.bookings);
@@ -80,8 +84,8 @@ const populateRooms = (availableRooms) => {
     <h3>${room.roomType} ${room.number}</h3>
     <p>Bed Size: <span class="italics">${room.bedSize}</span></p>
     <p>Has Bidet: <span class="italics">${room.bidet}<span></p>
-    <p>Number of Beds: <span class="italics"></span>${room.numBeds}</p>
-    <p>Rate per Night: <span class="italics"></span>$${room.costPerNight.toFixed(2)}</p>
+    <p>Number of Beds: <span class="italics">${room.numBeds}</span></p>
+    <p>Rate per Night: <span class="italics">$${room.costPerNight.toFixed(2)}</span></p>
     <button class="book-this-room">&#x02295 book</button>
   </section>`
   })
@@ -123,6 +127,31 @@ const fireApology = () => {
     icon: 'error',
     footer: 'Overlook Hotel Bookings'
   })
+}
+
+const cutID = (customerUN) => {
+  return parseInt(customerUN.slice(8, customerUN.length))
+}
+
+const login = () => {
+  if (username.value === 'manager' && password.value === 'overlook2021') {
+    toManagerDash();
+    hide(loginPage);
+  } else if (password.value === 'overlook2021') {
+    toUserDash(cutID(username.value))
+    hide(loginPage);
+  } else {
+    Swal.fire({
+      title: 'Hmm... are you sure?',
+      text: 'Username or password invalid, please try logging in again with a different username or password',
+      icon: 'error',
+      footer: 'Overlook Hotel Bookings'
+    })
+  }
+}
+
+const toUserDash = (loginID) => {
+  onLoad(loginID);
 }
 
 const filterByRoomType = (set, desiredType) => {
@@ -181,9 +210,19 @@ const userBookings = document.getElementById('userBookings')
 const selectDate = document.getElementById('selectDate')
 const activeArea = document.getElementById('activeArea')
 const roomTypeSelector = document.getElementById('roomTypeSelector')
+const loginPage = document.getElementById('loginPage')
+const loginBtn = document.getElementById('loginBtn')
+const username = document.getElementById('username')
+const password = document.getElementById('password')
 
 // Fire on load & Event Listeners
-onLoad();
+onLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 activeArea.addEventListener('click', () => popModal())
+loginBtn.addEventListener('click', () => login())
+loginBtn.addEventListener('keypress', () => {
+  if (event.keyCode === 13) {
+    return login();
+  }
+})

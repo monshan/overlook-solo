@@ -25,7 +25,7 @@ aside {
   grid-column: 4 / 5;
   grid-row: 2 / 3;
   border: 2px solid $secondary-color;
-  // overflow: scroll;
+  overflow: scroll;
 }
 
 footer {
@@ -44,4 +44,8 @@ footer {
 
 .italics {
   font-style: italic;
+}
+
+.hidden {
+  visibility: hidden;
 }
