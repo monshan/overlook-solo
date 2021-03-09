@@ -34,3 +34,8 @@ footer {
   margin: 10px 0px;
   padding: 8px 8px;
 }
+
+.user-card {
+  margin: 20px;
+  @include cubicShadow($primary-color);
+}

@@ -77,7 +77,7 @@ const managerLoad = () => {
         })
         user.sortBookings();
       })
-      managerGlobals(roomsRepo, bookingsRepo)
+      managerGlobals(roomsRepo, bookingsRepo, usersRepo)
     })
     .catch(err => console.log(err))
 }
@@ -85,12 +85,13 @@ const managerLoad = () => {
 const assignGlobals = (rooms, bookings, user) => {
   globalRooms = rooms;
   globalBookings = bookings;
-  currentUser = user || null;
+  currentUser = user;
 }
 
-const managerGlobals = (rooms, bookings) => {
+const managerGlobals = (rooms, bookings, users) => {
   globalRooms = rooms;
   globalBookings = bookings;
+  globalUsers = users;
 }
 
 const populateUserAside = (desiredUser) => {
@@ -104,6 +105,10 @@ const populateManagerAside = (desiredUser) => {
   managerSpending.innerText = `$${billing.toFixed(2)}`
   populateBookings(desiredUser.bookingsRecord, managerBookings)
 }
+
+// const managerSelect = () => {
+//   const event 
+// }
 
 const setSpendingMessage = (amt) => {
   spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
@@ -271,9 +276,29 @@ const popModal = () => {
     })
 }
 
-// const populateUsers = () => {
-//   const query = new RegExp (searchUser.value)
-// }
+const matchUserQuery = () => {
+  // const query = new RegExp (searchUser.value);
+  const query = searchUser.value.toLowerCase()
+  const matches = globalUsers.filter(user => {
+    if (user.name.toLowerCase().includes(query)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  populateUsers(matches);
+}
+
+const populateUsers = (matchedUsers) => {
+  searchUserResults.innerHTML = '';
+  matchedUsers.forEach(match => {
+    searchUserResults.innerHTML += `<section class="user-card" id="user${match.id}">
+    <h3>${match.name}</h3>
+    <p>ID: ${match.id}</p>
+    <button>See details</button>
+  </section>`
+  })
+}
 
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
@@ -298,11 +323,13 @@ const userSearch = document.getElementById('userSearch');
 const roomSearch = document.getElementById('roomSearch')
 
 // Fire on load & Event Listeners
-// customerLoad(5);
+managerLoad();
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
-searchUser.addEventListener('change', () => populateUsers())
+searchUser.addEventListener('keyup', () => matchUserQuery())
+//keyup
 activeArea.addEventListener('click', () => popModal())
+searchUserResults.addEventListener('click', () => managerSelect())
 loginBtn.addEventListener('click', () => login())
 loginBtn.addEventListener('keypress', () => {
   if (event.keyCode === 13) {
