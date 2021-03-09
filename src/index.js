@@ -91,18 +91,37 @@ const populateRooms = (availableRooms) => {
   })
 }
 
+const grabDate = () => {
+  return selectDate.value.replaceAll('-', '/');
+}
+
+const determineReport = () => {
+  const filled = globalBookings.bookingsByDate(grabDate());
+  const openRooms = globalRooms.filterByAva(filled);
+  const rev = globalRooms.calcHistoricalSpending(filled);
+  const occ = globalRooms.calcCapacity(filled);
+  populateReport(openRooms.length, occ, rev);
+}
+
+const populateReport = (count, occ, rev) => {
+  reportCount.innerText = `${count} rooms available on ${grabDate()}`;
+  reportOcc.innerText = `${occ}%`;
+  reportRevenue.innerText = `$${rev.toFixed(2)}`;
+}
+
 const showAvailableRooms = () => {
-  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const filled = globalBookings.bookingsByDate(grabDate());
   const openRooms = globalRooms.filterByAva(filled);
   if (openRooms.length) {
     populateRooms(openRooms);
   } else {
     fireApology();
   }
+  determineReport();
 }
 
 const advancedFilterRooms = () => {
-  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const filled = globalBookings.bookingsByDate(grabDate());
   const openRooms = globalRooms.filterByAva(filled);
   if (roomTypeSelector.value) {
     const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
@@ -118,6 +137,7 @@ const advancedFilterRooms = () => {
       fireApology();
     }
   }
+  determineReport();
 }
 
 const fireApology = () => {
@@ -176,7 +196,7 @@ const postNewBooking = (newBooking) => {
 const popModal = () => {
   let domID = event.target.closest('button').parentNode.id;
   let selectedRoom = globalRooms.rooms.find(room => room.number === parseInt(domID));
-  let selectedDate = selectDate.value.replaceAll('-', '/');
+  let selectedDate = grabDate();
   const newBooking = {
     "id": "5fwrgu4i7k55hl600",
     "userID": currentUser.id,
@@ -214,6 +234,9 @@ const loginPage = document.getElementById('loginPage')
 const loginBtn = document.getElementById('loginBtn')
 const username = document.getElementById('username')
 const password = document.getElementById('password')
+const reportCount = document.getElementById('reportCount');
+const reportRevenue = document.getElementById('reportRevenue');
+const reportOcc = document.getElementById('reportOcc')
 
 // Fire on load & Event Listeners
 onLoad(5);
