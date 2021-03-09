@@ -42,9 +42,7 @@ const onLoad = () => {
       })
       activeUser.sortBookings();
       assignGlobals(roomsRepo, bookingsRepo, activeUser);
-      const billing = roomsRepo.calcHistoricalSpending(activeUser.billingRoomNumbers())
-      populateBookings(activeUser.bookingsRecord)
-      setSpendingMessage(billing)
+      updateUserBookings();
     })
     .catch(err => console.log(err))
 }
@@ -53,6 +51,12 @@ const assignGlobals = (rooms, bookings, user) => {
   globalRooms = rooms;
   globalBookings = bookings;
   currentUser = user;
+}
+
+const updateUserBookings = () => {
+  const billing = globalRooms.calcHistoricalSpending(currentUser.billingRoomNumbers())
+  setSpendingMessage(billing)
+  populateBookings(currentUser.bookingsRecord)
 }
 
 const setSpendingMessage = (amt) => {
@@ -138,7 +142,8 @@ const popModal = () => {
   })
     .then(result => {
     if (result.isConfirmed) {
-      postNewBooking(newBooking);
+      currentUser.bookingsRecord.unshift(postNewBooking(newBooking));
+      setSpendingMessage()
     }
     })
   }
