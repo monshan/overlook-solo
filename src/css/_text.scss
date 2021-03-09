@@ -1,0 +1,29 @@
+* {
+  font-family: $primary-font;
+}
+
+h1 {
+  font-size: xx-large;
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-size: large;
+}
+
+.dotted {
+  font-family: $accent-font;
+}
+
+.aside__p__span {
+  font-style: italic;
+  font-weight: bolder;
+}
+
+.italics {
+  font-style: italic;
+}
+
+.hidden {
+  visibility: hidden;
+}
