@@ -18,11 +18,11 @@
     <section class="dashboard">
       <header>
         <h1>Welcome to <span class="dotted">Overlook</span></h1>
-        <input type="date" id="selectDate" aria-label="select a date to see available rooms">
-        <details>
+        <input type="date" id="selectDate" aria-label="select a date to see available rooms" role="tab">
+        <details role="tab">
           <summary>Advanced Search</summary>
           <label for="roomTypes">Filter by:</label>
-          <select name="roomTypes" id="roomTypeSelector" aria-label="select desired room type for filtering">
+          <select name="roomTypes" id="roomTypeSelector" aria-label="select desired room type for filtering" role="tab">
             <option value="">Room Type</option>
             <option value="single room">Single Room</option>
             <option value="suite">Suite</option>
@@ -38,6 +38,7 @@
       </main>
       <aside>
         <h2>All your bookings</h2>
+        <hr>
         <p id="spendingMess"></p>
         <section id="userBookings">
         </section>
