@@ -1,0 +1,4 @@
+@mixin cubicShadow($color) {
+  border: 2px solid $color;
+  box-shadow: -5px -5px 0px $color;
+}

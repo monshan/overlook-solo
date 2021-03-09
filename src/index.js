@@ -216,7 +216,7 @@ const username = document.getElementById('username')
 const password = document.getElementById('password')
 
 // Fire on load & Event Listeners
-// onLoad(5);
+onLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 activeArea.addEventListener('click', () => popModal())

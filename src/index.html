@@ -8,7 +8,7 @@
     <title>Overlook Solo</title>
   </head>
   <body>
-    <section class="login-page" id="loginPage">
+    <section class="login-page hidden" id="loginPage">
       <h1>Hello <span class="dotted">Friend</span>,</h1>
       <h2 class="italics">have we met before?</h2>
       <input type="text" placeholder="username" role="tab" id="username">
@@ -19,6 +19,7 @@
       <header>
         <h1>Welcome to <span class="dotted">Overlook</span></h1>
         <input type="date" id="selectDate" aria-label="select a date to see available rooms" role="tab">
+        <input type="text" class="hidden" id="searchUser" placeholder="Search customers" aria-label="search all users" role="tab">
         <details role="tab">
           <summary>Advanced Search</summary>
           <label for="roomTypes">Filter by:</label>
@@ -32,6 +33,10 @@
         </details>
       </header>
       <main>
+        <section class="main__section__manager">
+          <h2>Date Report</h2>
+
+        </section>
         <h2>Rooms Available</h2>
         <section class="active-area" id="activeArea">
         </section>
