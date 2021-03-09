@@ -91,7 +91,11 @@ const populateRooms = (availableRooms) => {
 const showAvailableRooms = () => {
   const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
   const openRooms = globalRooms.filterByAva(filled);
-  populateRooms(openRooms);
+  if (openRooms.length) {
+    populateRooms(openRooms);
+  } else {
+    fireApology();
+  }
 }
 
 const advancedFilterRooms = () => {
@@ -99,10 +103,27 @@ const advancedFilterRooms = () => {
   const openRooms = globalRooms.filterByAva(filled);
   if (roomTypeSelector.value) {
     const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
-    populateRooms(advancedRooms);
+    if (advancedRooms.length) {
+      populateRooms(advancedRooms);
+    } else {
+      fireApology();
+    }
   } else {
-    populateRooms(openRooms);
+    if (openRooms.length) {
+      populateRooms(openRooms);
+    } else {
+      fireApology();
+    }
   }
+}
+
+const fireApology = () => {
+  return Swal.fire({
+    title: 'So sorry!',
+    text: 'There are no available rooms that mactch your preferences on this date, please select another date or adjust your search filters',
+    icon: 'error',
+    footer: 'Overlook Hotel Bookings'
+  })
 }
 
 const filterByRoomType = (set, desiredType) => {
