@@ -1,14 +1,15 @@
 main {
   grid-column: 1 / 4;
   grid-row: 2 / 3;
-  padding-left: 25px;
+  padding-left: 18px;
   height: auto;
 }
 
 .active-area {
   padding: 25px;
   display: grid;
-  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  // grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1em;
   max-height: 100%;
   overflow: hidden;

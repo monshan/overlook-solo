@@ -1,7 +1,7 @@
 .dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 250px 300px auto auto;
+  grid-template-rows: 250px auto auto auto;
 }
 
 aside {
