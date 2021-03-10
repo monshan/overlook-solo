@@ -5,13 +5,10 @@ import User from './User'
 import Rooms from './Rooms'
 import Bookings from './Bookings'
 
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
-// import './images/turing-logo.png'
 let globalRooms = null;
 let globalBookings = null;
 let globalUsers = null;
 let currentUser = null;
-
 
 const getRooms = () => {
   return fetch('http://localhost:3001/api/v1/rooms')
@@ -32,10 +29,6 @@ const getSingleUser = (loginID) => {
   return fetch('http://localhost:3001/api/v1/customers/' + loginID)
     .then(response => response.json())
 }
-
-// const randomUser = () => {
-//   return Math.floor(Math.random() * 50)
-// }
 
 const hide = (desiredElement) => {
   desiredElement.classList.add('hidden')
@@ -106,9 +99,6 @@ const populateManagerAside = (desiredUser) => {
   populateBookings(desiredUser.bookingsRecord, managerBookings)
 }
 
-// const managerSelect = () => {
-//   const event 
-// }
 
 const setSpendingMessage = (amt) => {
   spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
@@ -135,7 +125,7 @@ const populateRooms = (availableRooms) => {
     <p>Rate per Night: <span class="italics">$${room.costPerNight.toFixed(2)}</span></p>
     <button class="book-this-room">&#x02295 book</button>
   </section>`
-  })
+  });
 }
 
 const grabDate = () => {
@@ -323,13 +313,12 @@ const userSearch = document.getElementById('userSearch');
 const roomSearch = document.getElementById('roomSearch')
 
 // Fire on load & Event Listeners
-managerLoad();
+customerLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 searchUser.addEventListener('keyup', () => matchUserQuery())
-//keyup
 activeArea.addEventListener('click', () => popModal())
-searchUserResults.addEventListener('click', () => managerSelect())
+// searchUserResults.addEventListener('click', () => managerSelect())
 loginBtn.addEventListener('click', () => login())
 loginBtn.addEventListener('keypress', () => {
   if (event.keyCode === 13) {

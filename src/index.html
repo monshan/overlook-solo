@@ -19,7 +19,7 @@
       <header>
         <h1>Welcome to <span class="dotted">Overlook</span></h1>
         <input type="date" id="selectDate" aria-label="select a date to see available rooms" role="tab">
-        <input type="text" id="searchUser" placeholder="Search customers" aria-label="search all users" role="tab">
+        <input type="text" id="searchUser" placeholder="Search customers" aria-label="search all users" role="tab" class="hidden">
         <details role="tab">
           <summary>Advanced Search</summary>
           <label for="roomTypes">Filter by:</label>
@@ -33,20 +33,20 @@
         </details>
       </header>
       <main>
-        <section class="main__section__report" id="dateReport">
+        <section class="main__section__report hidden" id="dateReport">
           <h2>Date Report</h2>
           <hr>
           <h3>Total Rooms Available: <span class="italics" id="reportCount"></span></h3>
           <h3>Revenue for selected date: <span class="italics" id="reportRevenue"></span></h3>
           <h3>Percentage Occupancy: <span class="italics" id="reportOcc"></span></h3>
         </section>
-        <section class="main__section__user-search" id="userSearch">
+        <section class="main__section__user-search hidden" id="userSearch">
           <h2>Users</h2>
           <hr>
           <section id="searchUserResults">
           </section>
         </section>
-        <section class="main__section__room-search hidden" id="roomSearch">
+        <section class="main__section__room-search" id="roomSearch">
           <h2>Rooms Available</h2>
           <section class="active-area" id="activeArea">
           </section>
