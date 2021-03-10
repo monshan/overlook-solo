@@ -33,14 +33,3 @@ aside {
   margin: 20px;
   @include cubicShadow($primary-color);
 }
-
-@media screen and (max-width: 970px) {
-  main {
-    grid-column: 1 / 6;
-  }
-
-  aside {
-    grid-row: 3 / 4;
-    grid-column: 1 / -1;
-  }
-}

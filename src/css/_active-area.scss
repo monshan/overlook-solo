@@ -2,6 +2,7 @@ main {
   grid-column: 1 / 4;
   grid-row: 2 / 3;
   padding-left: 25px;
+  height: auto;
 }
 
 .active-area {
@@ -9,4 +10,6 @@ main {
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: 1em;
+  max-height: 100%;
+  overflow: hidden;
 }
