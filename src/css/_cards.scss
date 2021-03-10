@@ -17,3 +17,8 @@
     bottom: 55%;
   }
 }
+
+.user-card {
+  margin: 20px;
+  @include cubicShadow($primary-color);
+}

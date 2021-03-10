@@ -8,7 +8,7 @@
     <title>Overlook Solo</title>
   </head>
   <body>
-    <section class="login-page hidden" id="loginPage" role="tablist">
+    <section class="login-page" id="loginPage" role="tablist">
       <h1>Hello <span class="dotted">Friend</span>,</h1>
       <h2 class="italics">have we met before?</h2>
       <input type="text" placeholder="username" role="tab" id="username">
@@ -16,7 +16,7 @@
       <button id="loginBtn" role="tab">&#10689</button>
     </section>
     <section class="dashboard">
-      <header role="tablist">
+      <header role="tablist" class="hidden" id="header">
         <h1>Welcome to <span class="dotted">Overlook</span></h1>
         <input type="date" id="selectDate" aria-label="select a date to see available rooms" role="tab">
         <input type="text" id="searchUser" placeholder="Search customers" aria-label="search all users" role="tab" class="hidden">
@@ -52,14 +52,14 @@
           </section>
         </section>
       </main>
-      <aside>
+      <aside id="userAside">
         <h2>All your bookings</h2>
         <hr>
         <p id="spendingMess"></p>
         <section id="userBookings">
         </section>
       </aside>
-      <aside class="hidden">
+      <aside class="hidden" id="managerAside">
         <h2 id="managerViewName"></h2>
         <h2>Total Spent: <span class="italics" id="managerViewSpending"></span></h2>
         <hr>

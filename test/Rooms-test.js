@@ -67,9 +67,14 @@ describe('Rooms Class', () => {
     expect(testRooms.filterByAva([room2.number, room3.number])).to.deep.equal([room1, room4])
   })
 
+  it('can return a room given a room number', () => {
+    expect(testRooms.findRoom(32)).to.deep.equal(room2);
+    expect(testRooms.findRoom(34)).to.deep.equal(room4);
+  })
+
   it('can accurately calculate total amount spent on all bookings listed as an array of room numbers', () => {
     expect(testRooms.calcHistoricalSpending([31, 34])).to.deep.equal(711.25)
-    expect(testRooms.calcHistoricalSpending([32, 33])).to.deep.equal(655.5)
+    expect(testRooms.calcHistoricalSpending([33, 32])).to.deep.equal(655.5)
     expect(testRooms.calcHistoricalSpending([32, 32])).to.deep.equal(691)
   })
 

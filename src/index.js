@@ -1,4 +1,3 @@
-// Imports
 import Swal from 'sweetalert2'
 import './css/base.scss';
 import User from './User'
@@ -93,13 +92,6 @@ const populateUserAside = (desiredUser) => {
   populateBookings(desiredUser.bookingsRecord, userBookings)
 }
 
-const populateManagerAside = (desiredUser) => {
-  const billing = globalRooms.calcHistoricalSpending(desiredUser.billingRoomNumbers())
-  managerSpending.innerText = `$${billing.toFixed(2)}`
-  populateBookings(desiredUser.bookingsRecord, managerBookings)
-}
-
-
 const setSpendingMessage = (amt) => {
   spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
 }
@@ -191,12 +183,17 @@ const cutID = (customerUN) => {
 const login = () => {
   if (username.value === 'manager' && password.value === 'overlook2021') {
     toManagerDash();
+    unHide(header);
     unHide(dateReport);
+    unHide(searchUser);
     unHide(userSearch);
     hide(roomSearch);
     hide(loginPage);
   } else if (password.value === 'overlook2021') {
     toUserDash(cutID(username.value));
+    unHide(header);
+    hide(userAside);
+    unHide(managerAside);
     hide(loginPage);
   } else {
     Swal.fire({
@@ -256,15 +253,15 @@ const popModal = () => {
     footer: 'Overlook Hotel Bookings'
   })
     .then(result => {
-    if (result.isConfirmed) {
-      postNewBooking(newBooking);
-      Swal.fire({
-        title: 'See you then!',
-        icon: 'success',
-        text: `Your booking on ${selectedDate} is confirmed!`,
-        footer: 'Overlook Hotel Bookings'
-      })
-    }
+      if (result.isConfirmed) {
+        postNewBooking(newBooking);
+        Swal.fire({
+          title: 'See you then!',
+          icon: 'success',
+          text: `Your booking on ${selectedDate} is confirmed!`,
+          footer: 'Overlook Hotel Bookings'
+        })
+      }
     })
 }
 
@@ -291,7 +288,6 @@ const populateUsers = (matchedUsers) => {
   })
 }
 
-// Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
 const selectDate = document.getElementById('selectDate')
@@ -306,20 +302,17 @@ const reportRevenue = document.getElementById('reportRevenue');
 const reportOcc = document.getElementById('reportOcc');
 const searchUser = document.getElementById('searchUser');
 const searchUserResults = document.getElementById('searchUserResults');
-const managerBookings = document.getElementById('managerViewBookings');
-const managerSpending = document.getElementById('managerViewSpeding');
-const managerName = document.getElementById('managerViewName');
 const dateReport = document.getElementById('dateReport');
 const userSearch = document.getElementById('userSearch');
-const roomSearch = document.getElementById('roomSearch')
+const roomSearch = document.getElementById('roomSearch');
+const header = document.getElementById('header');
+const userAside = document.getElementById('userAside');
+const managerAside = document.getElementById('managerAside');
 
-// Fire on load & Event Listeners
-customerLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 searchUser.addEventListener('keyup', () => matchUserQuery())
 activeArea.addEventListener('click', () => popModal())
-// searchUserResults.addEventListener('click', () => managerSelect())
 loginBtn.addEventListener('click', () => login())
 loginBtn.addEventListener('keypress', () => {
   if (event.keyCode === 13) {
