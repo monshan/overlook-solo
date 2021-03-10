@@ -5,6 +5,16 @@ main {
   height: auto;
 }
 
+.main__section__report {
+  margin: 20px;
+  @include cubicShadow(black);
+}
+
+.main__section__user-search {
+  margin: 20px;
+  @include cubicShadow(grey);
+}
+
 .active-area {
   padding: 25px;
   display: grid;
