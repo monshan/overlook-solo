@@ -5,9 +5,7 @@
   position: relative;
   height: 175px;
   width: 1fr;
-  border: 2px solid $primary-color;
-  padding-left: 25px;
-  box-shadow: -5px -5px 0px $primary-color;
+  @include cubicShadow($primary-color);
 
   button {
     position: absolute;

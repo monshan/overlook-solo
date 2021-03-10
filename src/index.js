@@ -9,6 +9,7 @@ import Bookings from './Bookings'
 // import './images/turing-logo.png'
 let globalRooms = null;
 let globalBookings = null;
+let globalUsers = null;
 let currentUser = null;
 
 
@@ -22,20 +23,29 @@ const getBookings = () => {
     .then(response => response.json())
 }
 
+const getAllUsers = () => {
+  return fetch('http://localhost:3001/api/v1/customers/')
+    .then(response => response.json())
+}
+
 const getSingleUser = (loginID) => {
   return fetch('http://localhost:3001/api/v1/customers/' + loginID)
     .then(response => response.json())
 }
 
-const randomUser = () => {
-  return Math.floor(Math.random() * 50)
-}
+// const randomUser = () => {
+//   return Math.floor(Math.random() * 50)
+// }
 
 const hide = (desiredElement) => {
   desiredElement.classList.add('hidden')
 }
 
-const onLoad = (userID) => {
+const unHide = (desiredElement) => {
+  desiredElement.classList.remove('hidden')
+}
+
+const customerLoad = (userID) => {
   Promise.all([getRooms(), getBookings(), getSingleUser(userID)])
     .then(([loadedRooms, loadedBookings, loadedUser]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
@@ -46,7 +56,28 @@ const onLoad = (userID) => {
       })
       activeUser.sortBookings();
       assignGlobals(roomsRepo, bookingsRepo, activeUser);
-      updateUserBookings();
+      populateUserAside(activeUser);
+    })
+    .catch(err => console.log(err))
+}
+
+const managerLoad = () => {
+  Promise.all([getRooms(), getBookings(), getAllUsers()])
+    .then(([loadedRooms, loadedBookings, loadedUsers]) => {
+      const roomsRepo = new Rooms (loadedRooms.rooms);
+      const bookingsRepo = new Bookings (loadedBookings.bookings);
+      const usersRepo = [];
+      loadedUsers.customers.forEach(user => {
+        const newU = new User (user)
+        usersRepo.push(newU)
+      })
+      usersRepo.forEach(user => {
+        bookingsRepo.bookingsByUser(user.id).forEach(entry => {
+          return user.addToBookingsRecord(entry);
+        })
+        user.sortBookings();
+      })
+      managerGlobals(roomsRepo, bookingsRepo, usersRepo)
     })
     .catch(err => console.log(err))
 }
@@ -57,20 +88,36 @@ const assignGlobals = (rooms, bookings, user) => {
   currentUser = user;
 }
 
-const updateUserBookings = () => {
-  const billing = globalRooms.calcHistoricalSpending(currentUser.billingRoomNumbers())
-  setSpendingMessage(billing)
-  populateBookings(currentUser.bookingsRecord)
+const managerGlobals = (rooms, bookings, users) => {
+  globalRooms = rooms;
+  globalBookings = bookings;
+  globalUsers = users;
 }
+
+const populateUserAside = (desiredUser) => {
+  const billing = globalRooms.calcHistoricalSpending(desiredUser.billingRoomNumbers())
+  setSpendingMessage(billing)
+  populateBookings(desiredUser.bookingsRecord, userBookings)
+}
+
+const populateManagerAside = (desiredUser) => {
+  const billing = globalRooms.calcHistoricalSpending(desiredUser.billingRoomNumbers())
+  managerSpending.innerText = `$${billing.toFixed(2)}`
+  populateBookings(desiredUser.bookingsRecord, managerBookings)
+}
+
+// const managerSelect = () => {
+//   const event 
+// }
 
 const setSpendingMessage = (amt) => {
   spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
 }
 
-const populateBookings = (desiredBookings) => {
-  userBookings.innerHTML = '';
+const populateBookings = (desiredBookings, location) => {
+  location.innerHTML = '';
   desiredBookings.forEach(book => {
-    userBookings.innerHTML += `<section class="booking-card">
+    location.innerHTML += `<section class="booking-card">
     <h3>${book.date}</h3>
     <p>Room Number: <span class="italics">${book.roomNumber}</span></p>
   </section>`
@@ -91,9 +138,26 @@ const populateRooms = (availableRooms) => {
   })
 }
 
+const grabDate = () => {
+  return selectDate.value.replaceAll('-', '/');
+}
+
+const determineReport = (filled, open) => {
+  const rev = globalRooms.calcHistoricalSpending(filled);
+  const occ = globalRooms.calcCapacity(filled);
+  populateReport(open.length, occ, rev);
+}
+
+const populateReport = (count, occ, rev) => {
+  reportCount.innerText = `${count} rooms available on ${grabDate()}`;
+  reportOcc.innerText = `${occ}%`;
+  reportRevenue.innerText = `$${rev.toFixed(2)}`;
+}
+
 const showAvailableRooms = () => {
-  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const filled = globalBookings.bookingsByDate(grabDate());
   const openRooms = globalRooms.filterByAva(filled);
+  determineReport(filled, openRooms);
   if (openRooms.length) {
     populateRooms(openRooms);
   } else {
@@ -102,7 +166,7 @@ const showAvailableRooms = () => {
 }
 
 const advancedFilterRooms = () => {
-  const filled = globalBookings.bookingsByDate(selectDate.value.replaceAll('-', '/'));
+  const filled = globalBookings.bookingsByDate(grabDate());
   const openRooms = globalRooms.filterByAva(filled);
   if (roomTypeSelector.value) {
     const advancedRooms = filterByRoomType(openRooms, roomTypeSelector.value)
@@ -118,6 +182,7 @@ const advancedFilterRooms = () => {
       fireApology();
     }
   }
+  determineReport(filled, openRooms);
 }
 
 const fireApology = () => {
@@ -136,9 +201,12 @@ const cutID = (customerUN) => {
 const login = () => {
   if (username.value === 'manager' && password.value === 'overlook2021') {
     toManagerDash();
+    unHide(dateReport);
+    unHide(userSearch);
+    hide(roomSearch);
     hide(loginPage);
   } else if (password.value === 'overlook2021') {
-    toUserDash(cutID(username.value))
+    toUserDash(cutID(username.value));
     hide(loginPage);
   } else {
     Swal.fire({
@@ -151,7 +219,11 @@ const login = () => {
 }
 
 const toUserDash = (loginID) => {
-  onLoad(loginID);
+  customerLoad(loginID);
+}
+
+const toManagerDash = () => {
+  managerLoad();
 }
 
 const filterByRoomType = (set, desiredType) => {
@@ -176,7 +248,7 @@ const postNewBooking = (newBooking) => {
 const popModal = () => {
   let domID = event.target.closest('button').parentNode.id;
   let selectedRoom = globalRooms.rooms.find(room => room.number === parseInt(domID));
-  let selectedDate = selectDate.value.replaceAll('-', '/');
+  let selectedDate = grabDate();
   const newBooking = {
     "id": "5fwrgu4i7k55hl600",
     "userID": currentUser.id,
@@ -204,6 +276,30 @@ const popModal = () => {
     })
 }
 
+const matchUserQuery = () => {
+  // const query = new RegExp (searchUser.value);
+  const query = searchUser.value.toLowerCase()
+  const matches = globalUsers.filter(user => {
+    if (user.name.toLowerCase().includes(query)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  populateUsers(matches);
+}
+
+const populateUsers = (matchedUsers) => {
+  searchUserResults.innerHTML = '';
+  matchedUsers.forEach(match => {
+    searchUserResults.innerHTML += `<section class="user-card" id="user${match.id}">
+    <h3>${match.name}</h3>
+    <p>ID: ${match.id}</p>
+    <button>See details</button>
+  </section>`
+  })
+}
+
 // Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
@@ -214,12 +310,26 @@ const loginPage = document.getElementById('loginPage')
 const loginBtn = document.getElementById('loginBtn')
 const username = document.getElementById('username')
 const password = document.getElementById('password')
+const reportCount = document.getElementById('reportCount');
+const reportRevenue = document.getElementById('reportRevenue');
+const reportOcc = document.getElementById('reportOcc');
+const searchUser = document.getElementById('searchUser');
+const searchUserResults = document.getElementById('searchUserResults');
+const managerBookings = document.getElementById('managerViewBookings');
+const managerSpending = document.getElementById('managerViewSpeding');
+const managerName = document.getElementById('managerViewName');
+const dateReport = document.getElementById('dateReport');
+const userSearch = document.getElementById('userSearch');
+const roomSearch = document.getElementById('roomSearch')
 
 // Fire on load & Event Listeners
-onLoad(5);
+managerLoad();
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
+searchUser.addEventListener('keyup', () => matchUserQuery())
+//keyup
 activeArea.addEventListener('click', () => popModal())
+searchUserResults.addEventListener('click', () => managerSelect())
 loginBtn.addEventListener('click', () => login())
 loginBtn.addEventListener('keypress', () => {
   if (event.keyCode === 13) {

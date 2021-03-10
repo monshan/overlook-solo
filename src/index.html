@@ -19,6 +19,7 @@
       <header>
         <h1>Welcome to <span class="dotted">Overlook</span></h1>
         <input type="date" id="selectDate" aria-label="select a date to see available rooms" role="tab">
+        <input type="text" id="searchUser" placeholder="Search customers" aria-label="search all users" role="tab">
         <details role="tab">
           <summary>Advanced Search</summary>
           <label for="roomTypes">Filter by:</label>
@@ -32,8 +33,23 @@
         </details>
       </header>
       <main>
-        <h2>Rooms Available</h2>
-        <section class="active-area" id="activeArea">
+        <section class="main__section__report" id="dateReport">
+          <h2>Date Report</h2>
+          <hr>
+          <h3>Total Rooms Available: <span class="italics" id="reportCount"></span></h3>
+          <h3>Revenue for selected date: <span class="italics" id="reportRevenue"></span></h3>
+          <h3>Percentage Occupancy: <span class="italics" id="reportOcc"></span></h3>
+        </section>
+        <section class="main__section__user-search" id="userSearch">
+          <h2>Users</h2>
+          <hr>
+          <section id="searchUserResults">
+          </section>
+        </section>
+        <section class="main__section__room-search hidden" id="roomSearch">
+          <h2>Rooms Available</h2>
+          <section class="active-area" id="activeArea">
+          </section>
         </section>
       </main>
       <aside>
@@ -43,12 +59,14 @@
         <section id="userBookings">
         </section>
       </aside>
+      <aside class="hidden">
+        <h2 id="managerViewName"></h2>
+        <h2>Total Spent: <span class="italics" id="managerViewSpending"></span></h2>
+        <hr>
+        <h2>Bookings</h2>
+        <section id="managerViewBookings">
+        </section>
+      </aside>
     </section>
-    <!-- <footer>
-      <ul>
-        <li>Contact</li>
-      </ul>
-    </footer> -->
-    <!-- Do not include the index.js or main.bundle.js file here - it is done automatically by the webpack server -->
   </body>
 </html>
