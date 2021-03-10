@@ -187,13 +187,13 @@ const login = () => {
     unHide(dateReport);
     unHide(searchUser);
     unHide(userSearch);
+    hide(userAside);
+    unHide(managerAside);
     hide(roomSearch);
     hide(loginPage);
   } else if (password.value === 'overlook2021') {
     toUserDash(cutID(username.value));
     unHide(header);
-    hide(userAside);
-    unHide(managerAside);
     hide(loginPage);
   } else {
     Swal.fire({
