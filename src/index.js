@@ -5,13 +5,10 @@ import User from './User'
 import Rooms from './Rooms'
 import Bookings from './Bookings'
 
-// An example of how you tell webpack to use an image (also need to link to it in the index.html)
-// import './images/turing-logo.png'
 let globalRooms = null;
 let globalBookings = null;
 let globalUsers = null;
 let currentUser = null;
-
 
 const getRooms = () => {
   return fetch('http://localhost:3001/api/v1/rooms')
@@ -33,10 +30,6 @@ const getSingleUser = (loginID) => {
     .then(response => response.json())
 }
 
-// const randomUser = () => {
-//   return Math.floor(Math.random() * 50)
-// }
-
 const hide = (desiredElement) => {
   desiredElement.classList.add('hidden')
 }
@@ -46,7 +39,7 @@ const unHide = (desiredElement) => {
 }
 
 const customerLoad = (userID) => {
-  Promise.all([getRooms(), getBookings(), getSingleUser(userID)])
+  return Promise.all([getRooms(), getBookings(), getSingleUser(userID)])
     .then(([loadedRooms, loadedBookings, loadedUser]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
       const bookingsRepo = new Bookings (loadedBookings.bookings);
@@ -106,9 +99,6 @@ const populateManagerAside = (desiredUser) => {
   populateBookings(desiredUser.bookingsRecord, managerBookings)
 }
 
-// const managerSelect = () => {
-//   const event 
-// }
 
 const setSpendingMessage = (amt) => {
   spendingMess.innerHTML = `You've spent <span class="aside__p__span">$${amt.toFixed(2)}</span> on all bookings with Overlook, thank you for choosing us!`
@@ -135,7 +125,7 @@ const populateRooms = (availableRooms) => {
     <p>Rate per Night: <span class="italics">$${room.costPerNight.toFixed(2)}</span></p>
     <button class="book-this-room">&#x02295 book</button>
   </section>`
-  })
+  });
 }
 
 const grabDate = () => {
@@ -242,6 +232,10 @@ const postNewBooking = (newBooking) => {
       }
       return response.json()
     })
+    .then(result => {
+      currentUser.bookingsRecord.unshift(result.newBooking);
+      populateUserAside(currentUser);
+    })
     .catch(error => console.log(error))
 }
 
@@ -250,26 +244,24 @@ const popModal = () => {
   let selectedRoom = globalRooms.rooms.find(room => room.number === parseInt(domID));
   let selectedDate = grabDate();
   const newBooking = {
-    "id": "5fwrgu4i7k55hl600",
     "userID": currentUser.id,
     "date": selectedDate,
     "roomNumber": selectedRoom.number
   };
   Swal.fire({
     title: 'Please confirm your booking information',
-    text: `Date: ${selectedDate} Room Number: ${selectedRoom.number} User: ${currentUser.name}`,
+    html: `Date: ${selectedDate}<br> Room Number: ${selectedRoom.number}<br> User: ${currentUser.name}`,
     icon: 'info',
     showCancelButton: true,
     footer: 'Overlook Hotel Bookings'
   })
     .then(result => {
     if (result.isConfirmed) {
-      const confirmBooking = postNewBooking(newBooking)
-      currentUser.bookingsRecord.unshift(confirmBooking);
+      postNewBooking(newBooking);
       Swal.fire({
         title: 'See you then!',
         icon: 'success',
-        text: `Your booking on ${selectedDate} is confirmed, if you would like to make chages or cancel your booking please access your 'My bookings' section`,
+        text: `Your booking on ${selectedDate} is confirmed!`,
         footer: 'Overlook Hotel Bookings'
       })
     }
@@ -277,7 +269,6 @@ const popModal = () => {
 }
 
 const matchUserQuery = () => {
-  // const query = new RegExp (searchUser.value);
   const query = searchUser.value.toLowerCase()
   const matches = globalUsers.filter(user => {
     if (user.name.toLowerCase().includes(query)) {
@@ -323,13 +314,12 @@ const userSearch = document.getElementById('userSearch');
 const roomSearch = document.getElementById('roomSearch')
 
 // Fire on load & Event Listeners
-managerLoad();
+customerLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 searchUser.addEventListener('keyup', () => matchUserQuery())
-//keyup
 activeArea.addEventListener('click', () => popModal())
-searchUserResults.addEventListener('click', () => managerSelect())
+// searchUserResults.addEventListener('click', () => managerSelect())
 loginBtn.addEventListener('click', () => login())
 loginBtn.addEventListener('keypress', () => {
   if (event.keyCode === 13) {
