@@ -54,7 +54,7 @@ const customerLoad = (userID) => {
 }
 
 const managerLoad = () => {
-  Promise.all([getRooms(), getBookings(), getAllUsers()])
+  return Promise.all([getRooms(), getBookings(), getAllUsers()])
     .then(([loadedRooms, loadedBookings, loadedUsers]) => {
       const roomsRepo = new Rooms (loadedRooms.rooms);
       const bookingsRepo = new Bookings (loadedBookings.bookings);
@@ -232,8 +232,18 @@ const postNewBooking = (newBooking) => {
     .then(result => {
       currentUser.bookingsRecord.unshift(result.newBooking);
       populateUserAside(currentUser);
+      Swal.fire({
+        title: 'See you then!',
+        icon: 'success',
+        text: `Your booking on ${grabDate()} is confirmed!`,
+        footer: 'Overlook Hotel Bookings'
+      });
     })
-    .catch(error => console.log(error))
+    .catch(error => Swal.fire({
+      title: `oops`,
+      icon: 'error',
+      text: `${error}`
+    }))
 }
 
 const popModal = () => {
@@ -255,12 +265,6 @@ const popModal = () => {
     .then(result => {
       if (result.isConfirmed) {
         postNewBooking(newBooking);
-        Swal.fire({
-          title: 'See you then!',
-          icon: 'success',
-          text: `Your booking on ${selectedDate} is confirmed!`,
-          footer: 'Overlook Hotel Bookings'
-        })
       }
     })
 }
