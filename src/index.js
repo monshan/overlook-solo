@@ -1,4 +1,3 @@
-// Imports
 import Swal from 'sweetalert2'
 import './css/base.scss';
 import User from './User'
@@ -184,12 +183,17 @@ const cutID = (customerUN) => {
 const login = () => {
   if (username.value === 'manager' && password.value === 'overlook2021') {
     toManagerDash();
+    unHide(header);
     unHide(dateReport);
+    unHide(searchUser);
     unHide(userSearch);
     hide(roomSearch);
     hide(loginPage);
   } else if (password.value === 'overlook2021') {
     toUserDash(cutID(username.value));
+    unHide(header);
+    hide(userAside);
+    unHide(managerAside);
     hide(loginPage);
   } else {
     Swal.fire({
@@ -284,7 +288,6 @@ const populateUsers = (matchedUsers) => {
   })
 }
 
-// Query Selectors
 const spendingMess = document.getElementById('spendingMess');
 const userBookings = document.getElementById('userBookings')
 const selectDate = document.getElementById('selectDate')
@@ -301,9 +304,11 @@ const searchUser = document.getElementById('searchUser');
 const searchUserResults = document.getElementById('searchUserResults');
 const dateReport = document.getElementById('dateReport');
 const userSearch = document.getElementById('userSearch');
-const roomSearch = document.getElementById('roomSearch')
+const roomSearch = document.getElementById('roomSearch');
+const header = document.getElementById('header');
+const userAside = document.getElementById('userAside');
+const managerAside = document.getElementById('managerAside');
 
-customerLoad(5);
 selectDate.addEventListener('change', () => showAvailableRooms())
 roomTypeSelector.addEventListener('change', () => advancedFilterRooms())
 searchUser.addEventListener('keyup', () => matchUserQuery())
