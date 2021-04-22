@@ -1,7 +1,25 @@
 # Overlook
+
 ## Primary Contributor
 
-**Marika Shanahan**
+[Marika Shanahan]('https://github.com/monshan')
+
+### Installation and Setup
+
+1. Clone down the local API [here]('https://github.com/turingschool-examples/overlook-api) using your terminal and run  <code>npm i</code> to install dependencies
+2. Run <code>npm start</code> on the local API repo to run the server. If successful, you should see a message in the terminal that reads <code>Overlook API is now running on http://localhost:3001 !</code>
+3. Clone down this repo and run <code>npm i</code> to install dependencies
+4. Run <code>npm start</code> on this repo to 
+5. Open localhost:8080 in your browser or click [here](http://localhost:8080/)
+6. Start interacting with Overlook!
+
+|   |Username|Password|
+|---|---|---|
+|Customer|<code>customer:id</code>|<code>overlook2021</code>|
+|Administrator|<code>manager</code>|<code>overlook2021</code>|
+
+The <code>:id</code> can be any number between <code>1</code> to <code>50</code>
+<hr>
 
 ### What is this?
 
@@ -23,21 +41,8 @@ Upon selecting a room with its associated button a popup will appear that asks y
 
 This web application is responsive for screens down to 360px width.
 
-![]()
-
-
 ### Tech Stack
 
-- HTML
-- Sass style CSS
-- JavaScript ES6 Conventiions
-- NPM package 'Sweet Alarm 2'
-
-### Installation and Setup
-
-1. Clone down the local API [here]('https://github.com/turingschool-examples/overlook-api) and run npm i to install packages
-2. Run npm start on the local API repo to instantiate
-3. Clone down this repo and run npm i to install packages
-4. Run npm start on this repo to instantiate the local server to run this web application
-5. Open localhost:8080 in your browser or click [here](http://localhost:8080/)
-6. Start interacting!
+- HTML5
+- CSS3 in SASS / SCSS Conventions
+- JavaScript ES6 Conventions (Vanilla JS)
