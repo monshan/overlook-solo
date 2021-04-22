@@ -2,11 +2,11 @@
 
 ## Primary Contributor
 
-[Marika Shanahan]('https://github.com/monshan')
+[Marika Shanahan](https://github.com/monshan)
 
 ### Installation and Setup
 
-1. Clone down the local API [here]('https://github.com/turingschool-examples/overlook-api) using your terminal and run  <code>npm i</code> to install dependencies
+1. Clone down the local API [here](https://github.com/turingschool-examples/overlook-api) using your terminal and run  <code>npm i</code> to install dependencies
 2. Run <code>npm start</code> on the local API repo to run the server. If successful, you should see a message in the terminal that reads <code>Overlook API is now running on http://localhost:3001 !</code>
 3. Clone down this repo and run <code>npm i</code> to install dependencies
 4. Run <code>npm start</code> on this repo to 
